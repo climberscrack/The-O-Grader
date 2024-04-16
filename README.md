@@ -2,7 +2,7 @@
 Hello you, crack addicts! This is a proof of concept of what an O-Grader could be. The idea is that Adam tells you if he's climbed the route, Pete gives you the O-grade and Tom rants on something.
 
 ## How to Use
-Download the zip file and unzip it Open *o-grader.html* with your preferred browser. Load the json file. Enter the name of a route and enjoy!
+Download the [zip file](https://github.com/climberscrack/The-O-Grader/archive/refs/heads/main.zip) and unzip it Open *o-grader.html* with your preferred browser. Load the json file. Enter the name of a route and enjoy!
 
 ## Limitations
 - Only perfect makes will work, if there's a typo it won't.
