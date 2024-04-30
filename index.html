@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The O-Grader: the Definitive Answer to Grading Controversy</title>
+  </head>
+  <body>
+    <div class="inquiring">
+      <h2>Inquiring the Scriptures in The Holy Logbook of Truth</h2>
+      <form id="routeForm">
+        <label for="route">Route:</label>
+        <input type="text" id="route" name="route" />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    <script type="module">
+      const logbook = await fetch("./logbook_of_truth.json").then(
+        async (res) => {
+          if (!res.ok) {
+            throw new Error("can't load logbook of truth");
+          }
+
+          return res.json();
+        }
+      );
+
+      let banter = await fetch("./toms_banter.json").then(async (res) => {
+        if (!res.ok) {
+          throw new Error("can't load toms banter");
+        }
+
+        return res.json();
+      });
+
+      const banterIdx = Math.floor(Math.random() * banter.length);
+      banter = banter[banterIdx];
+
+      console.log({ logbook, banter });
+
+      document
+        .getElementById("routeForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const routeInput = document.getElementById("route");
+          const route = routeInput.value;
+
+          var divs = document.querySelectorAll(".hidden_bubble");
+          divs.forEach(function (div) {
+            div.classList.add("bubble");
+            div.classList.remove("hidden_bubble");
+          });
+          let found = false;
+          for (let entry of logbook) {
+            if (entry.route === route) {
+              let o_grade;
+              if (entry.style == "onsight") {
+                o_grade = "O0-";
+              } else if (entry.style == "flash") {
+                o_grade = "O0";
+              } else if (entry.style == "send") {
+                o_grade = "O1";
+              } else if (entry.style == "redpoint") {
+                o_grade = "O1+";
+              } else {
+                o_grade = "O-undef";
+              }
+              document.getElementById(
+                "pete"
+              ).innerHTML = `<p>This route is an ${o_grade}.</p>`;
+              document.getElementById(
+                "adam"
+              ).innerHTML = `<p>I've climbed ${route}.</p>`;
+              if (route == "Belly Full of Bad Berries")
+                document.getElementById(
+                  "tom"
+                ).innerHTML = `<p>Pete, you've flashed a confirmed O1! You're a better climber than the big O-dog! That's brilliant! </p>`;
+              else {
+                document.getElementById("tom").innerHTML = banter;
+              }
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            document.getElementById(
+              "pete"
+            ).innerHTML = `<p>Let's face it, it's probably an O0.</p>`;
+            document.getElementById(
+              "adam"
+            ).innerHTML = `<p>I haven't climbed ${route}.</p>`;
+            document.getElementById(
+              "tom"
+            ).innerHTML = `<p>I haven't heard of this route, but I reckon I can climb it.</p>`;
+          }
+        });
+    </script>
+
+    <style>
+      .visible {
+        display: inline;
+      }
+
+      /* CSS styles */
+      .inquiring {
+        position: absolute; /* Set position to absolute */
+        top: 50px; /* Position from the top of the relative container */
+        left: 50px; /*
+            font-size: 16px;
+            color: #333; /* Text color */
+        text-align: center; /* Text alignment */
+        padding: 20px; /* Padding around the text block */
+        border: 1px solid #ccc; /* Border around the text block */
+        border-radius: 5px; /* Rounded corners */
+        background-color: #f9f9f9; /* Background color */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: white; /* Set background color to white */
+      }
+      .figure {
+        position: absolute; /* Set position to relative */
+        top: 300px;
+        left: 200px;
+        width: 600px;
+      }
+      .figure img {
+        display: block;
+        width: 100%; /* Set image width to 100% of its container */
+        height: auto; /* Automatically adjust height to maintain aspect ratio */
+      }
+
+      .bubble {
+        background-color: #eeeeee; /* Blue background color */
+        color: black; /* Text color */
+        padding: 10px 20px; /* Padding around the text */
+        border-radius: 20px; /* Rounded corners */
+        max-width: 300px; /* Max width of the bubble */
+      }
+
+      .hidden_bubble {
+        display: none;
+      }
+
+      .bubble::after {
+        content: "";
+        position: absolute;
+        bottom: -20px; /* Positioning for the triangle */
+        left: 20px; /* Positioning for the triangle */
+        border-width: 10px; /* Size of the triangle */
+        border-style: solid;
+        border-color: #eeeeee transparent transparent transparent; /* Triangle color */
+      }
+
+      #pete {
+        content: "";
+        position: absolute;
+        top: 820px;
+        left: 670px;
+        transform: translateY(-100%);
+      }
+
+      #tom {
+        content: "";
+        position: absolute;
+        top: 900px;
+        left: 130px;
+        transform: translateY(-100%);
+      }
+
+      #tom::after {
+        left: 320px; /* Positioning for the triangle */
+        transform: translateX(-100%);
+      }
+
+      #adam {
+        content: "";
+        position: absolute;
+        top: 480px;
+        left: 600px;
+        transform: translateY(-100%);
+      }
+    </style>
+
+    <div class="figure">
+      <img src="ondra_n_wideboyz.jpg" alt="Image" />
+    </div>
+
+    <div id="pete" class="hidden_bubble"></div>
+    <div id="adam" class="hidden_bubble"></div>
+    <div id="tom" class="hidden_bubble"></div>
+  </body>
+</html>
